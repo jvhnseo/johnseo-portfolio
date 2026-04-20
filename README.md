@@ -74,6 +74,6 @@ A creator-brand personal site for IS 110 final project.
 
 ## Things to swap before submitting
 
-- Social links on `index.html` currently point to placeholder handles — update `@johnseo` to your actual handles.
+- Social links on `index.html` currently point to placeholder handles — update `@jvhnseo` to your actual handles.
 - YouTube embed on `scratch.html` uses a classic reference video — swap the video ID in the iframe `src` if you want to use one of your own clips. Find your ID in any YouTube URL: `youtube.com/watch?v=VIDEO_ID_HERE` → then use `https://www.youtube.com/embed/VIDEO_ID_HERE`.
 - The resume stats (2.4M monthly reach, etc.) are placeholders — adjust to your real numbers.
