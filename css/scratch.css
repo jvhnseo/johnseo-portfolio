@@ -1,0 +1,367 @@
+/* ============================================================
+   Custom CSS #2 — for the from-scratch page only
+   Zero Bootstrap. Zero helpers. Just handwritten styles.
+============================================================ */
+
+/* Reset-ish */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ---- Page body: custom background (requirement) ---- */
+body {
+  font-family: 'Courier New', Courier, monospace;
+  color: #f4efe6;
+  background-color: #0e0a07;
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(255, 120, 40, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(80, 160, 255, 0.08) 0%, transparent 45%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.015) 2px,
+      rgba(255, 255, 255, 0.015) 4px
+    );
+  min-height: 100vh;
+  line-height: 1.6;
+  padding-bottom: 80px;
+}
+
+/* ---- Top bar / nav back to pro pages ---- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #000;
+  border-bottom: 2px solid #ff5a1f;
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.topbar .badge {
+  color: #ff5a1f;
+  font-weight: bold;
+  letter-spacing: 2px;
+  font-size: 14px;
+}
+
+.topbar nav a {
+  color: #f4efe6;
+  text-decoration: none;
+  margin-left: 18px;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-bottom: 1px dashed transparent;
+  padding-bottom: 2px;
+  transition: border-color 0.2s;
+}
+
+.topbar nav a:hover {
+  border-bottom-color: #ff5a1f;
+  color: #ff5a1f;
+}
+
+/* ---- Main container ---- */
+.wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px 28px 0;
+}
+
+/* ---- Typography (font-color + font-family requirements) ---- */
+h1 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 52px;
+  color: #ff5a1f;
+  line-height: 1.05;
+  margin-bottom: 12px;
+  letter-spacing: -1px;
+}
+
+h1 span.slash {
+  color: #f4efe6;
+  font-style: italic;
+  font-weight: 400;
+}
+
+h2 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 30px;
+  color: #f4efe6;
+  margin: 56px 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+h2::before {
+  content: "§ ";
+  color: #ff5a1f;
+}
+
+p {
+  color: #cfc6b8;
+  font-size: 16px;
+  margin-bottom: 14px;
+  max-width: 68ch;
+}
+
+a {
+  color: #ff8a56;
+}
+
+a:hover {
+  color: #fff;
+}
+
+/* ---- Table of contents / anchor menu ---- */
+.anchor-menu {
+  background-color: rgba(255, 90, 31, 0.07);
+  border-left: 3px solid #ff5a1f;
+  padding: 20px 24px;
+  margin-bottom: 40px;
+  font-size: 14px;
+}
+
+.anchor-menu strong {
+  display: block;
+  color: #ff5a1f;
+  letter-spacing: 2px;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.anchor-menu a {
+  display: inline-block;
+  margin-right: 18px;
+  color: #f4efe6;
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(244, 239, 230, 0.4);
+}
+
+.anchor-menu a:hover {
+  color: #ff5a1f;
+  border-bottom-color: #ff5a1f;
+}
+
+/* ---- Intro block with portrait image ---- */
+.intro {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 30px;
+  align-items: start;
+  margin-bottom: 50px;
+}
+
+.intro-text p {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 19px;
+  line-height: 1.55;
+  color: #e8dfd0;
+}
+
+.portrait {
+  width: 220px;
+  height: 280px;
+  background-color: #ff5a1f;
+  background-image: linear-gradient(135deg, #ff5a1f 0%, #c23600 100%);
+  border: 3px solid #f4efe6;
+  border-radius: 6px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 10px 10px 0 rgba(255, 90, 31, 0.25);
+}
+
+.portrait svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.portrait-tag {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background-color: #000;
+  color: #ff5a1f;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  padding: 4px 8px;
+  letter-spacing: 2px;
+}
+
+@media (max-width: 680px) {
+  .intro { grid-template-columns: 1fr; }
+  .portrait { width: 180px; height: 220px; }
+}
+
+/* ---- Rule cards block ---- */
+.rule-block {
+  background-color: rgba(244, 239, 230, 0.04);
+  border: 1px solid rgba(244, 239, 230, 0.12);
+  border-radius: 8px;
+  padding: 28px 32px;
+  margin: 30px 0;
+}
+
+/* ---- Nested lists (unordered in ordered — requirement) ---- */
+ol.rulebook {
+  list-style: none;
+  counter-reset: rule-counter;
+  padding: 0;
+}
+
+ol.rulebook > li {
+  counter-increment: rule-counter;
+  margin-bottom: 26px;
+  padding-left: 56px;
+  position: relative;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 18px;
+  color: #f4efe6;
+}
+
+ol.rulebook > li::before {
+  content: counter(rule-counter, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: -4px;
+  font-family: 'Courier New', monospace;
+  font-size: 28px;
+  font-weight: bold;
+  color: #ff5a1f;
+}
+
+ol.rulebook ul {
+  list-style: none;
+  margin-top: 10px;
+  padding-left: 0;
+}
+
+ol.rulebook ul li {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  color: #b5ac9e;
+  padding: 4px 0 4px 22px;
+  position: relative;
+}
+
+ol.rulebook ul li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: #ff5a1f;
+}
+
+/* ---- YouTube embed wrapper (responsive 16:9) ---- */
+.video-frame {
+  margin: 30px 0;
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border: 2px solid #ff5a1f;
+  border-radius: 8px;
+  box-shadow: 12px 12px 0 rgba(255, 90, 31, 0.2);
+}
+
+.video-frame iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-caption {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #8a8175;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 12px;
+  margin-bottom: 40px;
+}
+
+/* ---- Tableau embed wrapper ---- */
+.tableau-frame {
+  margin: 30px 0;
+  background-color: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  border: 2px solid #f4efe6;
+  box-shadow: 12px 12px 0 rgba(244, 239, 230, 0.15);
+}
+
+/* ---- Callout / webapp link ---- */
+.callout {
+  margin: 50px 0 20px;
+  padding: 32px;
+  background-color: #ff5a1f;
+  color: #1a0a00;
+  border-radius: 10px;
+  text-align: center;
+  font-family: Georgia, serif;
+}
+
+.callout h3 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: #1a0a00;
+}
+
+.callout p {
+  color: #1a0a00;
+  margin: 0 auto 18px;
+}
+
+.callout a.button {
+  display: inline-block;
+  background-color: #000;
+  color: #ff5a1f;
+  padding: 14px 28px;
+  text-decoration: none;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.callout a.button:hover {
+  background-color: #fff;
+  color: #ff5a1f;
+}
+
+/* ---- Footer ---- */
+.scratch-footer {
+  margin-top: 80px;
+  padding: 40px 28px 20px;
+  text-align: center;
+  color: #5d554a;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+.scratch-footer a {
+  color: #8a8175;
+  margin: 0 8px;
+}
+
+/* Little back-to-top */
+.top-anchor {
+  display: inline-block;
+  margin-top: 20px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #ff5a1f;
+  text-decoration: none;
+  letter-spacing: 2px;
+}

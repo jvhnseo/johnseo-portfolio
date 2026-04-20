@@ -1,0 +1,527 @@
+/* ============================================================
+   Custom CSS #1 — overrides & additions for the Bootstrap pages
+   Palette: editorial / warm-serif meets confident SLC orange
+============================================================ */
+
+:root {
+  --js-bg: #f5f1ea;
+  --js-bg-alt: #ece5d8;
+  --js-ink: #17130f;
+  --js-ink-soft: #4a403a;
+  --js-accent: #ff5a1f;   /* signal orange */
+  --js-accent-ink: #1d0b03;
+  --js-line: #d9cfbf;
+  --js-paper: #fffaf2;
+  --font-display: 'Bricolage Grotesque', serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+* { -webkit-font-smoothing: antialiased; }
+
+html, body {
+  background: var(--js-bg);
+  color: var(--js-ink);
+  font-family: var(--font-display);
+  font-weight: 400;
+}
+
+a { color: var(--js-accent); text-decoration: none; }
+a:hover { color: var(--js-accent-ink); }
+
+::selection { background: var(--js-accent); color: #fff; }
+
+/* ---------- NAV ---------- */
+.js-nav {
+  background: var(--js-ink) !important;
+  border-bottom: 1px solid #000;
+  padding: 14px 0;
+}
+.js-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff !important;
+  font-family: var(--font-display);
+  font-weight: 800;
+}
+.js-brand-mark {
+  display: inline-block;
+  background: var(--js-accent);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: .85rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  letter-spacing: .5px;
+}
+.js-brand-text { letter-spacing: -.02em; font-size: 1.1rem; }
+
+.js-nav .nav-link {
+  color: rgba(255,255,255,.72) !important;
+  font-weight: 500;
+  letter-spacing: .02em;
+  position: relative;
+}
+.js-nav .nav-link.active,
+.js-nav .nav-link:hover {
+  color: #fff !important;
+}
+.js-nav .nav-link.active::after {
+  content: "";
+  position: absolute;
+  left: 8px; right: 8px; bottom: -6px;
+  height: 2px; background: var(--js-accent);
+}
+
+/* ---------- BUTTONS ---------- */
+.js-btn-accent {
+  background: var(--js-accent);
+  color: #fff !important;
+  border: 1.5px solid var(--js-accent);
+  font-weight: 600;
+  letter-spacing: .01em;
+  border-radius: 999px;
+  padding: .65rem 1.4rem;
+  transition: transform .2s ease, background .2s ease;
+}
+.js-btn-accent:hover {
+  background: var(--js-accent-ink);
+  border-color: var(--js-accent-ink);
+  transform: translateY(-1px);
+}
+.js-btn-ghost {
+  background: transparent;
+  color: var(--js-ink) !important;
+  border: 1.5px solid var(--js-ink);
+  font-weight: 600;
+  border-radius: 999px;
+  padding: .65rem 1.4rem;
+  transition: background .2s ease, color .2s ease;
+}
+.js-btn-ghost:hover { background: var(--js-ink); color: #fff !important; }
+
+/* ---------- HERO ---------- */
+.js-hero {
+  position: relative;
+  padding: 96px 0 80px;
+  background:
+    radial-gradient(1200px 400px at 90% -10%, rgba(255,90,31,.18), transparent 60%),
+    radial-gradient(800px 300px at -10% 110%, rgba(23,19,15,.08), transparent 60%),
+    var(--js-bg);
+  overflow: hidden;
+}
+.js-hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(23,19,15,.05) 1px, transparent 1px);
+  background-size: 80px 100%;
+  pointer-events: none;
+}
+.js-eyebrow {
+  font-family: var(--font-mono);
+  font-size: .78rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--js-ink-soft);
+  margin-bottom: 1.25rem;
+}
+.js-hero-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 5.5vw, 4.6rem);
+  line-height: 1.02;
+  letter-spacing: -.035em;
+  color: var(--js-ink);
+}
+.js-hero-title em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--js-accent);
+}
+.js-underline {
+  position: relative;
+  white-space: nowrap;
+}
+.js-underline::after {
+  content: "";
+  position: absolute;
+  left: -2%; right: -2%; bottom: 4px;
+  height: 14px;
+  background: var(--js-accent);
+  opacity: .35;
+  z-index: -1;
+  transform: rotate(-1deg);
+}
+.js-hero-sub {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  color: var(--js-ink-soft);
+  line-height: 1.45;
+  max-width: 38rem;
+  margin-top: 1.25rem;
+}
+
+/* Hero card (right side) */
+.js-hero-card {
+  background: var(--js-ink);
+  color: #f5f1ea;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 20px 20px 0 rgba(255,90,31,.18);
+  border: 1px solid #000;
+}
+.js-hero-card-header {
+  padding: 14px 18px;
+  background: #0c0a08;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.js-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #2a241f;
+}
+.js-dot:nth-child(1){ background:#ff5a1f; }
+.js-dot:nth-child(2){ background:#f3c969; }
+.js-dot:nth-child(3){ background:#6fd19a; }
+.js-mono {
+  font-family: var(--font-mono);
+  font-size: .78rem;
+  color: rgba(255,255,255,.55);
+  letter-spacing: .05em;
+}
+.js-hero-card-body { padding: 20px 22px 26px; }
+.js-ticker-row {
+  display: flex; align-items: baseline; gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px dashed rgba(255,255,255,.12);
+  font-size: .98rem;
+}
+.js-ticker-row:last-of-type { border-bottom: none; }
+.js-tag {
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  letter-spacing: .14em;
+  color: var(--js-accent);
+  min-width: 96px;
+  text-transform: uppercase;
+}
+.js-big-number {
+  margin-top: 18px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255,255,255,.14);
+  padding-top: 18px;
+}
+.js-big-number strong {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -.03em;
+}
+
+/* Social icons */
+.js-socials { display: flex; gap: 14px; }
+.js-socials a {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  border: 1.5px solid var(--js-ink);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--js-ink);
+  font-size: 1.1rem;
+  transition: all .2s ease;
+}
+.js-socials a:hover {
+  background: var(--js-accent);
+  border-color: var(--js-accent);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* ---------- STATS ---------- */
+.js-stats {
+  background: var(--js-ink);
+  color: #fff;
+  padding: 48px 0;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+}
+.js-stat-num {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -.03em;
+  color: var(--js-accent);
+  line-height: 1;
+}
+.js-stat-label {
+  font-family: var(--font-mono);
+  font-size: .76rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.65);
+  margin-top: 8px;
+}
+
+/* ---------- SECTIONS ---------- */
+.js-section { padding: 100px 0; }
+.js-h2 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 3.8vw, 3rem);
+  letter-spacing: -.03em;
+  line-height: 1.05;
+  max-width: 22ch;
+}
+.js-link-arrow {
+  font-family: var(--font-mono);
+  font-size: .85rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--js-ink) !important;
+  border-bottom: 1.5px solid var(--js-ink);
+  padding-bottom: 2px;
+}
+.js-link-arrow:hover { color: var(--js-accent) !important; border-color: var(--js-accent); }
+
+/* ---------- WORK CARDS ---------- */
+.js-work-card {
+  background: var(--js-paper);
+  border: 1px solid var(--js-line);
+  border-radius: 12px;
+  padding: 36px 28px 28px;
+  height: 100%;
+  position: relative;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.js-work-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px -20px rgba(23,19,15,.35);
+}
+.js-work-card--accent {
+  background: var(--js-ink);
+  color: #f5f1ea;
+  border-color: #000;
+}
+.js-work-card--accent h3,
+.js-work-card--accent .js-work-num { color: #fff; }
+.js-work-num {
+  font-family: var(--font-mono);
+  font-size: .82rem;
+  letter-spacing: .14em;
+  color: var(--js-accent);
+  margin-bottom: 22px;
+}
+.js-work-card h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.6rem;
+  letter-spacing: -.02em;
+  margin-bottom: 10px;
+}
+.js-work-card p {
+  font-family: var(--font-serif);
+  font-size: 1.12rem;
+  line-height: 1.5;
+  color: var(--js-ink-soft);
+}
+.js-work-card--accent p { color: rgba(255,255,255,.78); }
+.js-work-tag {
+  display: inline-block;
+  margin-top: 18px;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  border: 1px solid var(--js-line);
+  border-radius: 999px;
+  color: var(--js-ink-soft);
+}
+.js-work-card--accent .js-work-tag {
+  border-color: rgba(255,255,255,.25);
+  color: rgba(255,255,255,.8);
+}
+
+/* ---------- PARTNERS ---------- */
+.js-partners {
+  padding: 60px 0;
+  border-top: 1px solid var(--js-line);
+  border-bottom: 1px solid var(--js-line);
+  background: var(--js-bg-alt);
+}
+.js-partner {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.6rem;
+  color: var(--js-ink-soft);
+}
+
+/* ---------- CTA ---------- */
+.js-cta {
+  padding: 120px 0;
+  background:
+    radial-gradient(600px 300px at 50% 0%, rgba(255,90,31,.22), transparent 70%),
+    var(--js-bg);
+}
+.js-cta .js-h2 { margin-left: auto; margin-right: auto; }
+.js-cta-sub {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  color: var(--js-ink-soft);
+  margin-top: 1rem;
+}
+
+/* ---------- FOOTER ---------- */
+.js-footer {
+  background: var(--js-ink);
+  color: #cfc6b8;
+  padding: 40px 0;
+}
+.js-footer a {
+  color: #cfc6b8;
+  margin-left: 20px;
+  font-family: var(--font-mono);
+  font-size: .85rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.js-footer a:hover { color: var(--js-accent); }
+
+/* ---------- ABOUT PAGE ---------- */
+.js-about-hero {
+  padding: 100px 0 60px;
+  background: var(--js-bg);
+}
+.js-pillcard {
+  background: var(--js-paper);
+  border: 1px solid var(--js-line);
+  border-radius: 14px;
+  padding: 28px;
+  height: 100%;
+}
+.js-pillcard h4 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+.js-pillcard p {
+  font-family: var(--font-serif);
+  color: var(--js-ink-soft);
+  font-size: 1.08rem;
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+.js-quote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+  line-height: 1.25;
+  color: var(--js-ink);
+  border-left: 3px solid var(--js-accent);
+  padding-left: 28px;
+  margin: 40px 0;
+  max-width: 42rem;
+}
+
+/* ---------- RESUME PAGE ---------- */
+.js-resume {
+  background: var(--js-bg);
+  padding: 80px 0 100px;
+}
+.js-resume-paper {
+  background: var(--js-paper);
+  border: 1px solid var(--js-line);
+  border-radius: 14px;
+  padding: 56px 56px 48px;
+  box-shadow: 0 30px 60px -40px rgba(23,19,15,.35);
+}
+.js-resume-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 2px solid var(--js-ink);
+  padding-bottom: 20px;
+}
+.js-resume-head h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  letter-spacing: -.035em;
+  margin: 0;
+}
+.js-resume-head .js-mono { color: var(--js-ink-soft); }
+
+.js-resume h2 {
+  font-family: var(--font-mono);
+  font-size: .82rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--js-accent);
+  margin: 36px 0 16px;
+}
+.js-resume-entry {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 24px;
+  padding: 14px 0;
+  border-bottom: 1px dashed var(--js-line);
+}
+.js-resume-entry:last-child { border-bottom: none; }
+.js-resume-when {
+  font-family: var(--font-mono);
+  font-size: .88rem;
+  color: var(--js-ink-soft);
+  padding-top: 4px;
+}
+.js-resume-what h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: -.01em;
+  margin-bottom: 4px;
+}
+.js-resume-where {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--js-ink-soft);
+  margin-bottom: 8px;
+}
+.js-resume-what ul {
+  padding-left: 18px;
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  color: var(--js-ink);
+  line-height: 1.5;
+}
+.js-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.js-skill {
+  font-family: var(--font-mono);
+  font-size: .78rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  background: var(--js-bg-alt);
+  border: 1px solid var(--js-line);
+  border-radius: 999px;
+  color: var(--js-ink);
+}
+
+@media (max-width: 640px) {
+  .js-resume-paper { padding: 32px 24px; }
+  .js-resume-entry { grid-template-columns: 1fr; gap: 6px; }
+}
