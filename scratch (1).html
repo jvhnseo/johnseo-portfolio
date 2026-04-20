@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Field Notes — Street Interview Lab</title>
+
+  <!-- External stylesheet (requirement) -->
+  <link rel="stylesheet" href="css/scratch.css">
+
+  <!-- Inline styles (fallback so page always looks good even if external CSS fails) -->
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      color: #f4efe6;
+      background-color: #0e0a07;
+      background-image:
+        radial-gradient(circle at 20% 10%, rgba(255, 120, 40, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(80, 160, 255, 0.08) 0%, transparent 45%),
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.015) 2px, rgba(255, 255, 255, 0.015) 4px);
+      min-height: 100vh;
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background-color: #000;
+      border-bottom: 2px solid #ff5a1f;
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .topbar .badge { color: #ff5a1f; font-weight: bold; letter-spacing: 2px; font-size: 14px; }
+    .topbar nav a {
+      color: #f4efe6;
+      text-decoration: none;
+      margin-left: 18px;
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-bottom: 1px dashed transparent;
+      padding-bottom: 2px;
+      transition: border-color 0.2s;
+    }
+    .topbar nav a:hover { border-bottom-color: #ff5a1f; color: #ff5a1f; }
+
+    .wrap { max-width: 860px; margin: 0 auto; padding: 48px 28px 0; }
+
+    h1 {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 52px;
+      color: #ff5a1f;
+      line-height: 1.05;
+      margin-bottom: 12px;
+      letter-spacing: -1px;
+    }
+    h1 .slash { color: #f4efe6; font-style: italic; font-weight: 400; }
+
+    h2 {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 30px;
+      color: #f4efe6;
+      margin: 56px 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    h2::before { content: "§ "; color: #ff5a1f; }
+
+    p {
+      color: #cfc6b8;
+      font-size: 16px;
+      margin-bottom: 14px;
+      max-width: 68ch;
+    }
+
+    a { color: #ff8a56; }
+    a:hover { color: #fff; }
+
+    .anchor-menu {
+      background-color: rgba(255, 90, 31, 0.07);
+      border-left: 3px solid #ff5a1f;
+      padding: 20px 24px;
+      margin-bottom: 40px;
+      font-size: 14px;
+    }
+    .anchor-menu strong {
+      display: block;
+      color: #ff5a1f;
+      letter-spacing: 2px;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+    .anchor-menu a {
+      display: inline-block;
+      margin-right: 18px;
+      color: #f4efe6;
+      text-decoration: none;
+      border-bottom: 1px dotted rgba(244, 239, 230, 0.4);
+    }
+    .anchor-menu a:hover { color: #ff5a1f; border-bottom-color: #ff5a1f; }
+
+    .intro {
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 30px;
+      align-items: start;
+      margin-bottom: 50px;
+    }
+    .intro-text p {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 19px;
+      line-height: 1.55;
+      color: #e8dfd0;
+    }
+    .portrait {
+      width: 220px;
+      height: 280px;
+      background-image: linear-gradient(135deg, #ff5a1f 0%, #c23600 100%);
+      border: 3px solid #f4efe6;
+      border-radius: 6px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 10px 10px 0 rgba(255, 90, 31, 0.25);
+    }
+    .portrait-tag {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background-color: #000;
+      color: #ff5a1f;
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      padding: 4px 8px;
+      letter-spacing: 2px;
+      z-index: 2;
+    }
+    @media (max-width: 680px) {
+      .intro { grid-template-columns: 1fr; }
+      .portrait { width: 180px; height: 220px; }
+    }
+
+    .rule-block {
+      background-color: rgba(244, 239, 230, 0.04);
+      border: 1px solid rgba(244, 239, 230, 0.12);
+      border-radius: 8px;
+      padding: 28px 32px;
+      margin: 30px 0;
+    }
+
+    ol.rulebook { list-style: none; counter-reset: rule-counter; padding: 0; }
+    ol.rulebook > li {
+      counter-increment: rule-counter;
+      margin-bottom: 26px;
+      padding-left: 56px;
+      position: relative;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 18px;
+      color: #f4efe6;
+    }
+    ol.rulebook > li::before {
+      content: counter(rule-counter, decimal-leading-zero);
+      position: absolute;
+      left: 0;
+      top: -4px;
+      font-family: 'Courier New', monospace;
+      font-size: 28px;
+      font-weight: bold;
+      color: #ff5a1f;
+    }
+    ol.rulebook ul { list-style: none; margin-top: 10px; padding-left: 0; }
+    ol.rulebook ul li {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      color: #b5ac9e;
+      padding: 4px 0 4px 22px;
+      position: relative;
+    }
+    ol.rulebook ul li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: #ff5a1f;
+    }
+
+    .video-frame {
+      margin: 30px 0;
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border: 2px solid #ff5a1f;
+      border-radius: 8px;
+      box-shadow: 12px 12px 0 rgba(255, 90, 31, 0.2);
+    }
+    .video-frame iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .video-caption {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: #8a8175;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-top: 12px;
+      margin-bottom: 40px;
+    }
+
+    .tableau-frame {
+      margin: 30px 0;
+      background-color: #fff;
+      padding: 16px;
+      border-radius: 8px;
+      border: 2px solid #f4efe6;
+      box-shadow: 12px 12px 0 rgba(244, 239, 230, 0.15);
+    }
+
+    .callout {
+      margin: 50px 0 20px;
+      padding: 32px;
+      background-color: #ff5a1f;
+      color: #1a0a00;
+      border-radius: 10px;
+      text-align: center;
+      font-family: Georgia, serif;
+    }
+    .callout h3 { font-size: 28px; margin-bottom: 10px; color: #1a0a00; }
+    .callout p { color: #1a0a00; margin: 0 auto 18px; }
+    .callout a.button {
+      display: inline-block;
+      background-color: #000;
+      color: #ff5a1f;
+      padding: 14px 28px;
+      text-decoration: none;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .callout a.button:hover { background-color: #fff; color: #ff5a1f; }
+
+    .scratch-footer {
+      margin-top: 80px;
+      padding: 40px 28px 20px;
+      text-align: center;
+      color: #5d554a;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+    .scratch-footer a { color: #8a8175; margin: 0 8px; }
+
+    .top-anchor {
+      display: inline-block;
+      margin-top: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: #ff5a1f;
+      text-decoration: none;
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body id="top">
+
+  <!-- Top bar with navigation BACK to the pro pages (requirement) -->
+  <div class="topbar">
+    <div class="badge">FIELD NOTES · v3</div>
+    <nav>
+      <a href="index.html">&larr; Back to Pro Site</a>
+      <a href="about.html">About</a>
+      <a href="resume.html">Resume</a>
+    </nav>
+  </div>
+
+  <div class="wrap">
+
+    <!-- Hero / title -->
+    <h1>The Street Interview <span class="slash">/</span> Lab.</h1>
+    <p style="font-size: 18px; color: #8a8175; font-family: Georgia, serif; font-style: italic;">
+      Behind-the-scenes notes, uncut takes, and the stuff my pro site is too polished to show.
+    </p>
+
+    <!-- On-page anchor menu (on-page anchor requirement) -->
+    <div class="anchor-menu">
+      <strong>JUMP TO →</strong>
+      <a href="#why">Why I do this</a>
+      <a href="#rules">The rulebook</a>
+      <a href="#video">Reference tape</a>
+      <a href="#data">The data nerd side</a>
+      <a href="#app">Try the generator</a>
+    </div>
+
+    <!-- Intro with custom image (not from bootstrap) -->
+    <div class="intro" id="why">
+      <div class="intro-text">
+        <p>
+          I stop strangers for a living. Sounds weird written down, but that's the job. Man-on-the-street video
+          is a craft most people think is "just ask a question," and that's why most people's clips flop.
+        </p>
+        <p>
+          This page is the lab notebook. It's where I work out hook structures, keep track of what formats
+          landed, and log the uncut stuff my pro site doesn't show. If you found this — congrats, you're early.
+        </p>
+      </div>
+      <div class="portrait">
+        <!-- Inline SVG microphone image (requirement: image not from bootstrap) -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 280" style="width:100%; height:100%; display:block;">
+          <defs>
+            <pattern id="dots" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.18)"/>
+            </pattern>
+          </defs>
+          <rect width="220" height="280" fill="url(#dots)"/>
+          <g transform="translate(110, 130)">
+            <rect x="-22" y="-55" width="44" height="70" rx="22" ry="22" fill="#1a0a00" stroke="#fff" stroke-width="2"/>
+            <line x1="-18" y1="-45" x2="18" y2="-45" stroke="#ff5a1f" stroke-width="1.5"/>
+            <line x1="-18" y1="-35" x2="18" y2="-35" stroke="#ff5a1f" stroke-width="1.5"/>
+            <line x1="-18" y1="-25" x2="18" y2="-25" stroke="#ff5a1f" stroke-width="1.5"/>
+            <line x1="-18" y1="-15" x2="18" y2="-15" stroke="#ff5a1f" stroke-width="1.5"/>
+            <line x1="-18" y1="-5" x2="18" y2="-5" stroke="#ff5a1f" stroke-width="1.5"/>
+            <rect x="-3" y="15" width="6" height="50" fill="#1a0a00" stroke="#fff" stroke-width="2"/>
+            <rect x="-30" y="65" width="60" height="8" rx="2" fill="#1a0a00" stroke="#fff" stroke-width="2"/>
+          </g>
+          <g fill="none" stroke="#fff" stroke-width="2" opacity="0.7">
+            <path d="M 35 110 Q 20 130 35 150"/>
+            <path d="M 25 100 Q 5 130 25 160"/>
+            <path d="M 185 110 Q 200 130 185 150"/>
+            <path d="M 195 100 Q 215 130 195 160"/>
+          </g>
+          <text x="110" y="250" text-anchor="middle" fill="#fff" font-family="Courier New, monospace" font-size="11" letter-spacing="2">ON THE RECORD</text>
+        </svg>
+        <div class="portrait-tag">REC · 00:00:01</div>
+      </div>
+    </div>
+
+    <!-- SECTION: Rules -->
+    <h2 id="rules">The rulebook (what I actually follow)</h2>
+    <p>
+      Every format I post goes through the same filter. This list has been rewritten about a dozen times. If you
+      steal it, at least pretend you came up with the last one yourself.
+    </p>
+
+    <div class="rule-block">
+      <!-- Ordered list with unordered list nested inside (requirement) -->
+      <ol class="rulebook">
+        <li>
+          <strong>The hook lives in the first three seconds.</strong>
+          <ul>
+            <li>No intro. No "hey guys."</li>
+            <li>Question first, face second, context third.</li>
+            <li>If the thumbnail doesn't work, the hook doesn't either.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Strangers > scripts.</strong>
+          <ul>
+            <li>Real reactions out-rank rehearsed ones every time.</li>
+            <li>If a stranger says something better than I could have written, use their exact phrasing.</li>
+            <li>Never edit a stranger to look worse than they actually were.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Generosity travels.</strong>
+          <ul>
+            <li>Shopping sprees land because the camera catches real surprise, not acting.</li>
+            <li>Always tip the employees who helped on location.</li>
+            <li>The stranger is the star, not me.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Brand > views.</strong>
+          <ul>
+            <li>A viral clip that conflicts with the brand is a loss, not a win.</li>
+            <li>Faith-forward means I'd show my grandma the final cut.</li>
+            <li>Every collab has to pass the same test.</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+
+    <!-- SECTION: Video -->
+    <h2 id="video">Reference tape (for the craft nerds)</h2>
+    <p>
+      Here's a clinic on street interview craft — good reference if you're trying to understand why the
+      format works. I come back to stuff like this whenever my own hooks start feeling stale.
+    </p>
+
+    <!-- Embedded YouTube video (requirement) -->
+    <div class="video-frame">
+      <iframe
+        src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+        title="Reference tape"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+    <p class="video-caption">// EMBEDDED VIA YOUTUBE IFRAME</p>
+
+    <!-- SECTION: Tableau -->
+    <h2 id="data">The data nerd side</h2>
+    <p>
+      Most creators don't read their own numbers. I do, because I have to do it for class anyway. Here's a live,
+      interactive Tableau dashboard — not a screenshot. Play with it. This is exactly the kind of view I use
+      when I'm debating whether a format deserves a second shot or a retirement.
+    </p>
+
+    <!-- Live Tableau embed (requirement) -->
+    <div class="tableau-frame">
+      <div class='tableauPlaceholder' id='vizJseo' style='position: relative; width:100%;'>
+        <noscript>
+          <a href='#'>
+            <img alt='Tableau Dashboard' src='https://public.tableau.com/static/images/Re/RegionalSampleWorkbook/Storms/1_rss.png' style='border: none; width:100%;' />
+          </a>
+        </noscript>
+        <object class='tableauViz' style='display:block; width: 100%; height: 650px;'>
+          <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+          <param name='embed_code_version' value='3' />
+          <param name='site_root' value='' />
+          <param name='name' value='RegionalSampleWorkbook/Storms' />
+          <param name='tabs' value='no' />
+          <param name='toolbar' value='yes' />
+          <param name='animate_transition' value='yes' />
+          <param name='display_static_image' value='yes' />
+          <param name='display_spinner' value='yes' />
+          <param name='display_overlay' value='yes' />
+          <param name='display_count' value='yes' />
+          <param name='language' value='en-US' />
+        </object>
+      </div>
+      <script type='text/javascript'>
+        (function() {
+          var divElement = document.getElementById('vizJseo');
+          var vizElement = divElement.getElementsByTagName('object')[0];
+          vizElement.style.width = '100%';
+          vizElement.style.height = '650px';
+          var scriptElement = document.createElement('script');
+          scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+          vizElement.parentNode.insertBefore(scriptElement, vizElement);
+        })();
+      </script>
+    </div>
+    <p class="video-caption">// LIVE TABLEAU — CLICK, FILTER, DRILL DOWN</p>
+
+    <!-- SECTION: WebApp -->
+    <h2 id="app">Try the interview question generator</h2>
+    <p>
+      When I'm driving to a shoot and my brain is empty, I need a prompt in five seconds. So I built one.
+      It's a generator that spits out a street interview question in whatever tone you need —
+      funny, faith-adjacent, or pure chaos. Built it in a single HTML page as a lab experiment.
+    </p>
+
+    <div class="callout">
+      <h3>The Question Generator</h3>
+      <p>Pick a vibe. Get a question. Go stop someone.</p>
+      <a href="app.html" class="button">Open the App →</a>
+    </div>
+
+    <a href="#top" class="top-anchor">↑ BACK TO TOP</a>
+
+  </div>
+
+  <footer class="scratch-footer">
+    <p>// FIELD NOTES — UNPOLISHED ON PURPOSE //</p>
+    <p style="margin-top: 8px;">
+      <a href="index.html">Pro Site</a> ·
+      <a href="about.html">About</a> ·
+      <a href="resume.html">Resume</a> ·
+      <a href="app.html">Web App</a>
+    </p>
+  </footer>
+
+</body>
+</html>
