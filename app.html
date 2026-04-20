@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Question Generator — John Seo</title>
+  <style>
+    /* ====== Single-file web app ====== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0e0a07;
+      --paper: #f4efe6;
+      --accent: #ff5a1f;
+      --accent-soft: rgba(255, 90, 31, 0.12);
+      --ink: #1a0a00;
+      --mute: #8a8175;
+      --line: rgba(255,255,255,0.08);
+      --font-serif: Georgia, 'Times New Roman', serif;
+      --font-mono: 'Courier New', Courier, monospace;
+    }
+
+    body {
+      font-family: var(--font-mono);
+      background-color: var(--bg);
+      color: var(--paper);
+      min-height: 100vh;
+      background-image:
+        radial-gradient(circle at 80% 10%, rgba(255,90,31,0.18) 0%, transparent 45%),
+        radial-gradient(circle at 10% 90%, rgba(255,90,31,0.08) 0%, transparent 50%);
+      padding: 40px 20px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 760px;
+      margin: 0 auto 40px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar .logo {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      color: var(--paper);
+    }
+    .topbar .logo em {
+      color: var(--accent);
+      font-style: italic;
+    }
+    .topbar a {
+      color: var(--paper);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 2px;
+      border-bottom: 1px dashed var(--mute);
+      padding-bottom: 3px;
+    }
+    .topbar a:hover {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .card {
+      max-width: 760px;
+      margin: 0 auto;
+      background-color: var(--paper);
+      color: var(--ink);
+      border-radius: 14px;
+      padding: 44px 44px 36px;
+      box-shadow: 20px 20px 0 rgba(255,90,31,0.2);
+      position: relative;
+    }
+
+    .card::before {
+      content: "REC";
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      background: var(--accent);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 3px;
+      letter-spacing: 2px;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      top: 28px;
+      right: 62px;
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: blink 1.3s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 42px;
+      line-height: 1.05;
+      letter-spacing: -1px;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+    h1 em {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    .sub {
+      font-family: var(--font-serif);
+      font-style: italic;
+      color: #555;
+      font-size: 17px;
+      margin-bottom: 32px;
+    }
+
+    .label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--ink);
+      margin: 24px 0 10px;
+      display: block;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .chip {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      padding: 10px 16px;
+      background: transparent;
+      border: 1.5px solid var(--ink);
+      color: var(--ink);
+      cursor: pointer;
+      border-radius: 999px;
+      letter-spacing: 1px;
+      transition: all 0.15s;
+    }
+    .chip:hover {
+      background: var(--accent-soft);
+    }
+    .chip.active {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+    }
+
+    .generate {
+      margin-top: 32px;
+      width: 100%;
+      padding: 18px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      letter-spacing: 3px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+    .generate:hover {
+      background: var(--ink);
+      transform: translateY(-2px);
+    }
+    .generate:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .output {
+      margin-top: 36px;
+      padding: 28px;
+      background: var(--ink);
+      color: var(--paper);
+      border-radius: 10px;
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+    .output .timestamp {
+      position: absolute;
+      top: 12px;
+      left: 16px;
+      font-size: 10px;
+      color: var(--mute);
+      letter-spacing: 2px;
+    }
+    .output .question {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 24px;
+      line-height: 1.4;
+      color: var(--paper);
+      padding: 0 0 16px;
+    }
+    .output .question::before {
+      content: '"';
+      color: var(--accent);
+      font-size: 60px;
+      font-family: var(--font-serif);
+      line-height: 0;
+      vertical-align: -0.4em;
+      margin-right: 6px;
+    }
+    .output .meta {
+      font-size: 11px;
+      color: var(--mute);
+      letter-spacing: 2px;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px dashed var(--line);
+      padding-top: 12px;
+    }
+
+    .output .placeholder {
+      font-family: var(--font-serif);
+      font-style: italic;
+      color: var(--mute);
+      font-size: 17px;
+      text-align: center;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 2px;
+      background: transparent;
+      border: 1.5px solid var(--ink);
+      color: var(--ink);
+      cursor: pointer;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+    .action-btn:hover {
+      background: var(--ink);
+      color: var(--paper);
+    }
+    .action-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .log {
+      max-width: 760px;
+      margin: 40px auto 0;
+      padding: 0 8px;
+    }
+
+    .log-title {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--mute);
+      margin-bottom: 12px;
+    }
+
+    .log-item {
+      padding: 12px 16px;
+      background: rgba(244, 239, 230, 0.04);
+      border-left: 2px solid var(--accent);
+      margin-bottom: 8px;
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 15px;
+      color: #cfc6b8;
+    }
+
+    .log-item .tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-style: normal;
+      font-size: 10px;
+      color: var(--accent);
+      letter-spacing: 2px;
+      margin-right: 10px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      animation: fadeIn 0.35s ease-out;
+    }
+
+    @media (max-width: 640px) {
+      .card { padding: 28px 24px; }
+      h1 { font-size: 32px; }
+      .output .question { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="logo">John <em>/</em> Seo</div>
+    <a href="scratch.html">← BACK TO FIELD NOTES</a>
+  </div>
+
+  <main class="card">
+    <div class="eyebrow">AI-ASSISTED · ONE QUESTION AT A TIME</div>
+    <h1>The Street Interview <em>Question</em> Generator.</h1>
+    <p class="sub">Pick a vibe, pick a topic. I'll hand you a question so weird strangers will actually stop walking.</p>
+
+    <label class="label">01 · VIBE</label>
+    <div class="chips" id="vibeChips">
+      <button class="chip active" data-vibe="funny">Funny</button>
+      <button class="chip" data-vibe="wholesome">Wholesome</button>
+      <button class="chip" data-vibe="spicy">Spicy</button>
+      <button class="chip" data-vibe="philosophical">Deep</button>
+      <button class="chip" data-vibe="chaotic">Chaotic</button>
+    </div>
+
+    <label class="label">02 · TOPIC</label>
+    <div class="chips" id="topicChips">
+      <button class="chip active" data-topic="life">Life</button>
+      <button class="chip" data-topic="relationships">Relationships</button>
+      <button class="chip" data-topic="money">Money</button>
+      <button class="chip" data-topic="faith">Faith</button>
+      <button class="chip" data-topic="pop-culture">Pop Culture</button>
+      <button class="chip" data-topic="random">Totally Random</button>
+    </div>
+
+    <button class="generate" id="generateBtn">Generate a question →</button>
+
+    <div class="output" id="output">
+      <span class="timestamp">// 00:00:00</span>
+      <div class="placeholder">Pick your vibe, pick your topic, and hit generate.</div>
+    </div>
+
+    <div class="actions">
+      <button class="action-btn" id="copyBtn" disabled>📋 Copy</button>
+      <button class="action-btn" id="saveBtn" disabled>⭐ Save</button>
+      <button class="action-btn" id="againBtn" disabled>🔁 Another</button>
+    </div>
+  </main>
+
+  <div class="log" id="log" style="display:none;">
+    <div class="log-title">SAVED QUESTIONS ──────</div>
+    <div id="logList"></div>
+  </div>
+
+  <script>
+    // ====== Question Bank — built with AI assistance ======
+    // Organized by vibe → topic. Each combination has curated questions.
+    const QUESTIONS = {
+      funny: {
+        life: [
+          "What's the most embarrassing thing that happened to you this week?",
+          "If you had to describe your life using one emoji, which one and why?",
+          "What's the pettiest reason you've ever ghosted someone?",
+          "What's a completely unimportant skill you're weirdly proud of?",
+          "What's the weirdest thing you've Googled in the last 48 hours?",
+          "What's your most irrational fear, and be honest."
+        ],
+        relationships: [
+          "What's the biggest red flag you've ever ignored?",
+          "What's your worst first date story in under 15 seconds?",
+          "What's an ick that has ended things for you immediately?",
+          "What's a hill you'd die on in a relationship?",
+          "What's the most delusional thing you've believed about a crush?",
+          "Be honest — have you ever stalked an ex on a burner account?"
+        ],
+        money: [
+          "What's the dumbest thing you've ever bought and instantly regretted?",
+          "What's your most embarrassing money habit?",
+          "What would you do if you found $100 on the ground right now?",
+          "What's something you spend way too much money on and refuse to stop?",
+          "If your bank account could talk, what would it say about you?",
+          "What's the cheapest you've ever been to save like six dollars?"
+        ],
+        faith: [
+          "What's the weirdest prayer you've ever caught yourself saying?",
+          "What church snack hits different and don't lie?",
+          "What's something you believed as a kid at church that turned out to be wrong?",
+          "What's the most chaotic thing that's ever happened in a Sunday service?",
+          "Be honest — have you ever fake-dozed during a long meeting?"
+        ],
+        'pop-culture': [
+          "What's a movie everyone loves that you secretly think is trash?",
+          "What's the most embarrassing song in your current rotation?",
+          "Which celebrity do you think is secretly the worst person?",
+          "What's a trend you got WAY too into and now pretend didn't happen?",
+          "What show did you rage-quit and never come back to?",
+          "Who's the most overrated musician alive right now?"
+        ],
+        random: [
+          "If you had to fight a kindergartner for a million dollars, could you win?",
+          "What's the weirdest thing in your fridge right now?",
+          "Describe your walk in three words that aren't 'normal.'",
+          "If you had to delete one app right now, which one and why?",
+          "What's a completely fake fact you've convinced people is real?",
+          "What's the strangest compliment you've ever received?"
+        ]
+      },
+      wholesome: {
+        life: [
+          "What's something small that made you genuinely smile this week?",
+          "Who's someone that changed your life and doesn't know it?",
+          "What's a moment you wish you could live again exactly as it was?",
+          "What's the best piece of advice you've ever gotten?",
+          "What's something you're proud of that you've never told anyone?",
+          "What's a small habit that's quietly making your life better?"
+        ],
+        relationships: [
+          "What's the kindest thing a stranger has ever done for you?",
+          "What's the sweetest thing someone has done for you recently?",
+          "Who in your life makes you feel the most seen?",
+          "What's a tradition you have with a friend that means everything?",
+          "What's something you love about your best friend that they don't know?",
+          "What's the most meaningful compliment you've ever received?"
+        ],
+        money: [
+          "What's the best money you've ever spent — not the most, the BEST?",
+          "What's something you'd spend your last $20 on and feel totally fine?",
+          "What's the most generous thing anyone has ever done for you?",
+          "If you could gift one person $1,000 right now, who and why?",
+          "What's something you invested in that paid off in ways money can't measure?"
+        ],
+        faith: [
+          "What's a moment your faith genuinely carried you through something hard?",
+          "What's the most powerful answer to prayer you've ever experienced?",
+          "What's something you learned about God this year that changed you?",
+          "What's a quiet miracle in your life most people wouldn't notice?",
+          "Who first taught you about faith, and what stuck with you?"
+        ],
+        'pop-culture': [
+          "What's a movie that made you a better person?",
+          "What's a song that feels like a hug every time you hear it?",
+          "What's a show you rewatch when life gets heavy, and why?",
+          "What fictional character taught you something real?",
+          "What's an album that basically raised you?"
+        ],
+        random: [
+          "What's something tiny you noticed today that made the day better?",
+          "What's something you're grateful for that sounds ridiculous out loud?",
+          "What's a memory you return to when you need to feel safe?",
+          "What's the best thing you've eaten in the last month, be specific?",
+          "What's something you love about yourself that took years to love?"
+        ]
+      },
+      spicy: {
+        life: [
+          "What's a take you have that would get you in trouble in your group chat?",
+          "What's something you do that you'd NEVER admit on camera — but here we are?",
+          "Who's the worst person you've ever had to be polite to?",
+          "What's something people praise about you that you think is overrated?",
+          "What's a lie you've told so many times you kinda believe it now?"
+        ],
+        relationships: [
+          "What's a reason you ghosted someone that you'd never tell them?",
+          "Who's the one that got away, and are you still mad about it?",
+          "What's a dealbreaker you'd never admit out loud?",
+          "Have you ever stayed with someone just because it was easier than leaving?",
+          "What's the worst way someone has tried to flirt with you?"
+        ],
+        money: [
+          "Who in your life is broke and doesn't realize it?",
+          "Would you take $50,000 to never see your best friend again?",
+          "What's a purchase you judge other people for making?",
+          "Have you ever lied about what you make? In which direction?",
+          "What's your actual opinion on splitting the check?"
+        ],
+        faith: [
+          "What's a question about faith you're afraid to ask out loud?",
+          "What's a religious belief you quietly disagree with?",
+          "What's something you wish your religious community talked about more?"
+        ],
+        'pop-culture': [
+          "What's a celebrity everyone loves that you think is actually mid?",
+          "Which beloved movie is actually kind of trash if you really think about it?",
+          "What's a fanbase that's more embarrassing than the artist itself?",
+          "Who's the most overrated musician right now, no filter?",
+          "What show was everyone wrong about?"
+        ],
+        random: [
+          "What's a secret you'd take to the grave?",
+          "Who's someone in your life that secretly annoys you?",
+          "What's a rumor about you that was actually true?",
+          "What's the pettiest grudge you're still holding?",
+          "What's your villain origin story?"
+        ]
+      },
+      philosophical: {
+        life: [
+          "What's something you believed five years ago that you now think was completely wrong?",
+          "If you had to give your life one sentence as a title, what would it be?",
+          "What do you think most people waste their one life on?",
+          "What's a version of yourself you've had to let go of?",
+          "Are you the person your 10-year-old self was hoping you'd become?",
+          "What's something you know you'll regret not doing?"
+        ],
+        relationships: [
+          "What do you think love actually is, stripped of all the romance?",
+          "Can you truly know someone, or just collect impressions of them?",
+          "What's the difference between loving someone and needing them?",
+          "Is it possible to love someone the wrong amount?",
+          "What have you learned about yourself from heartbreak?"
+        ],
+        money: [
+          "At what amount of money would you stop chasing more?",
+          "Do you think wealth actually makes people happier or just quieter?",
+          "What's something priceless that money can actually buy?",
+          "Would you rather be rich and unknown or famous and broke?",
+          "What's the real cost of the life you want?"
+        ],
+        faith: [
+          "What do you believe happens after we die, and why?",
+          "What's a question about God you've wrestled with for years?",
+          "Do you think doubt is the opposite of faith, or part of it?",
+          "What would have to happen for you to change your beliefs?",
+          "What does a good life look like to you — and who taught you that?"
+        ],
+        'pop-culture': [
+          "Why do you think we're obsessed with watching strangers' lives online?",
+          "What does it say about us that our heroes are mostly entertainers?",
+          "Is nostalgia a feeling or a prison?",
+          "What does fame actually cost the people who have it?"
+        ],
+        random: [
+          "What's something you know to be true that you can't prove?",
+          "If memories weren't real but felt real, would they still matter?",
+          "Are you the same person you were ten years ago?",
+          "What would you tell a stranger if you knew you'd never see them again?",
+          "What's a question you wish someone would ask you?"
+        ]
+      },
+      chaotic: {
+        life: [
+          "Rank these fears: public speaking, spiders, being forgotten. Go.",
+          "If you had to live one day of your life on loop forever, which one?",
+          "What would your autobiography be titled and who'd play you?",
+          "Describe yourself like a dating app bio written by your worst enemy.",
+          "What's your most unhinged take about the current weather?"
+        ],
+        relationships: [
+          "Would you rather date someone who's always 20 minutes late or someone who texts in all caps?",
+          "Pick one: soul mate that's annoying, or decent person that's boring?",
+          "If your ex and your current got in a fight, who wins and why?",
+          "Roast yourself like your ex would, go.",
+          "What's your most red-flag-but-also-green-flag trait?"
+        ],
+        money: [
+          "You have $1,000 and 30 seconds to spend it all — go.",
+          "Would you rather find $500 or never lose socks in the dryer again?",
+          "Rank: student loans, credit card debt, owing your mom $40. Worst to best.",
+          "What would you spend a billion dollars on in one day, no investments allowed?"
+        ],
+        faith: [
+          "Sell me on your religion using only emojis.",
+          "What's the most unhinged bible story nobody talks about?",
+          "If heaven has a menu, what's the signature dish?"
+        ],
+        'pop-culture': [
+          "Cast three celebrities as the Holy Trinity of awful roommates.",
+          "What song would be the most embarrassing to die to?",
+          "If your life was a reality show, what would the tagline be?",
+          "Rank: Marvel, DC, Harry Potter, Star Wars — by how much they've ruined adults."
+        ],
+        random: [
+          "If you had to fight every animal in a zoo one at a time, what order?",
+          "You can delete ONE color from existence. Which and why?",
+          "Pitch me a cereal brand based on your personality.",
+          "Would you rather always speak in Shakespearean English or always sing your sentences?",
+          "Invent a law. You have full government authority. Go."
+        ]
+      }
+    };
+
+    // ====== State ======
+    let currentVibe = 'funny';
+    let currentTopic = 'life';
+    let currentQuestion = null;
+    let recentQuestions = [];
+    const savedQuestions = [];
+
+    // ====== Chip interactions ======
+    function bindChips(containerId, callback) {
+      const container = document.getElementById(containerId);
+      container.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('chip')) return;
+        container.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        e.target.classList.add('active');
+        callback(e.target.dataset.vibe || e.target.dataset.topic);
+      });
+    }
+    bindChips('vibeChips', v => currentVibe = v);
+    bindChips('topicChips', t => currentTopic = t);
+
+    // ====== DOM refs ======
+    const btn = document.getElementById('generateBtn');
+    const out = document.getElementById('output');
+    const copyBtn = document.getElementById('copyBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const againBtn = document.getElementById('againBtn');
+
+    // ====== Question generation ======
+    function pickQuestion() {
+      const pool = (QUESTIONS[currentVibe] && QUESTIONS[currentVibe][currentTopic]) || [];
+      if (pool.length === 0) {
+        const fallback = (QUESTIONS[currentVibe] && (QUESTIONS[currentVibe].random || QUESTIONS[currentVibe].life)) || [];
+        return fallback[Math.floor(Math.random() * fallback.length)] || "What's something interesting about you?";
+      }
+      // Avoid repeating the last 3 picks if possible
+      const availablePool = pool.length > 3 ? pool.filter(q => !recentQuestions.includes(q)) : pool;
+      const choices = availablePool.length > 0 ? availablePool : pool;
+      const picked = choices[Math.floor(Math.random() * choices.length)];
+      recentQuestions.push(picked);
+      if (recentQuestions.length > 3) recentQuestions.shift();
+      return picked;
+    }
+
+    function generate() {
+      btn.disabled = true;
+      btn.textContent = 'Thinking...';
+      // Tiny delay for a satisfying feel
+      setTimeout(() => {
+        const question = pickQuestion();
+        currentQuestion = { text: question, vibe: currentVibe, topic: currentTopic };
+        renderQuestion(question);
+        copyBtn.disabled = false;
+        saveBtn.disabled = false;
+        againBtn.disabled = false;
+        btn.disabled = false;
+        btn.textContent = 'Generate another →';
+      }, 450);
+    }
+
+    function renderQuestion(text) {
+      const now = new Date();
+      const stamp = String(now.getHours()).padStart(2,'0') + ':' +
+                    String(now.getMinutes()).padStart(2,'0') + ':' +
+                    String(now.getSeconds()).padStart(2,'0');
+      out.innerHTML =
+        '<span class="timestamp">// ' + stamp + ' · ' + currentVibe.toUpperCase() + ' · ' + currentTopic.toUpperCase() + '</span>' +
+        '<div class="question fade-in">' + escapeHTML(text) + '</div>' +
+        '<div class="meta"><span>VIBE: ' + currentVibe + '</span><span>TOPIC: ' + currentTopic + '</span></div>';
+    }
+
+    function escapeHTML(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    btn.addEventListener('click', generate);
+    againBtn.addEventListener('click', generate);
+
+    // ====== Copy button ======
+    copyBtn.addEventListener('click', async () => {
+      if (!currentQuestion) return;
+      try {
+        await navigator.clipboard.writeText(currentQuestion.text);
+        copyBtn.textContent = '✓ Copied!';
+        setTimeout(() => copyBtn.textContent = '📋 Copy', 1400);
+      } catch (e) {
+        copyBtn.textContent = 'Copy failed';
+      }
+    });
+
+    // ====== Save button ======
+    saveBtn.addEventListener('click', () => {
+      if (!currentQuestion) return;
+      if (savedQuestions.some(q => q.text === currentQuestion.text)) {
+        saveBtn.textContent = 'Already saved';
+        setTimeout(() => saveBtn.textContent = '⭐ Save', 1400);
+        return;
+      }
+      savedQuestions.unshift({ ...currentQuestion });
+      renderLog();
+      saveBtn.textContent = '✓ Saved!';
+      setTimeout(() => saveBtn.textContent = '⭐ Save', 1400);
+    });
+
+    function renderLog() {
+      const logEl = document.getElementById('log');
+      const listEl = document.getElementById('logList');
+      if (savedQuestions.length === 0) {
+        logEl.style.display = 'none';
+        return;
+      }
+      logEl.style.display = 'block';
+      listEl.innerHTML = savedQuestions.map(q =>
+        '<div class="log-item"><span class="tag">' + q.vibe.toUpperCase() + ' / ' + q.topic.toUpperCase() + '</span>' + escapeHTML(q.text) + '</div>'
+      ).join('');
+    }
+  </script>
+</body>
+</html>
